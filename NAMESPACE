@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
+useDynLib(NestedCategBayesImpute)
+importFrom("stats", "rbeta", "rgamma")
+import(coda,dplyr)
