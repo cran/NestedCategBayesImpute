@@ -2,38 +2,42 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 checkconstraints <- function(data, neededpossiblehh, hh_size) {
-    .Call('NestedCategBayesImpute_checkconstraints', PACKAGE = 'NestedCategBayesImpute', data, neededpossiblehh, hh_size)
+    .Call('_NestedCategBayesImpute_checkconstraints', PACKAGE = 'NestedCategBayesImpute', data, neededpossiblehh, hh_size)
 }
 
 checkconstraints_HHhead_at_group_level <- function(data, neededpossiblehh, hh_size) {
-    .Call('NestedCategBayesImpute_checkconstraints_HHhead_at_group_level', PACKAGE = 'NestedCategBayesImpute', data, neededpossiblehh, hh_size)
+    .Call('_NestedCategBayesImpute_checkconstraints_HHhead_at_group_level', PACKAGE = 'NestedCategBayesImpute', data, neededpossiblehh, hh_size)
 }
 
 households2individuals <- function(data, hh_size) {
-    .Call('NestedCategBayesImpute_households2individuals', PACKAGE = 'NestedCategBayesImpute', data, hh_size)
+    .Call('_NestedCategBayesImpute_households2individuals', PACKAGE = 'NestedCategBayesImpute', data, hh_size)
+}
+
+checkSZ <- function(Data_to_check, h) {
+    .Call('_NestedCategBayesImpute_checkSZ', PACKAGE = 'NestedCategBayesImpute', Data_to_check, h)
 }
 
 groupcount <- function(g1, g2, n1, n2) {
-    .Call('NestedCategBayesImpute_groupcount', PACKAGE = 'NestedCategBayesImpute', g1, g2, n1, n2)
+    .Call('_NestedCategBayesImpute_groupcount', PACKAGE = 'NestedCategBayesImpute', g1, g2, n1, n2)
 }
 
 groupcount1D <- function(g, n) {
-    .Call('NestedCategBayesImpute_groupcount1D', PACKAGE = 'NestedCategBayesImpute', g, n)
+    .Call('_NestedCategBayesImpute_groupcount1D', PACKAGE = 'NestedCategBayesImpute', g, n)
 }
 
 sampleG <- function(phi, data, omega, pi, ni, HHdata, lambda) {
-    .Call('NestedCategBayesImpute_sampleG', PACKAGE = 'NestedCategBayesImpute', phi, data, omega, pi, ni, HHdata, lambda)
+    .Call('_NestedCategBayesImpute_sampleG', PACKAGE = 'NestedCategBayesImpute', phi, data, omega, pi, ni, HHdata, lambda)
 }
 
 samplehouseholds <- function(phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize) {
-    .Call('NestedCategBayesImpute_samplehouseholds', PACKAGE = 'NestedCategBayesImpute', phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize)
+    .Call('_NestedCategBayesImpute_samplehouseholds', PACKAGE = 'NestedCategBayesImpute', phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize)
 }
 
 samplehouseholds_HHhead_at_group_level <- function(phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize) {
-    .Call('NestedCategBayesImpute_samplehouseholds_HHhead_at_group_level', PACKAGE = 'NestedCategBayesImpute', phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize)
+    .Call('_NestedCategBayesImpute_samplehouseholds_HHhead_at_group_level', PACKAGE = 'NestedCategBayesImpute', phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize)
 }
 
 sampleM <- function(phi, data, omega, G, serial) {
-    .Call('NestedCategBayesImpute_sampleM', PACKAGE = 'NestedCategBayesImpute', phi, data, omega, G, serial)
+    .Call('_NestedCategBayesImpute_sampleM', PACKAGE = 'NestedCategBayesImpute', phi, data, omega, G, serial)
 }
 
