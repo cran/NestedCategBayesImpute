@@ -1,4 +1,6 @@
 #include <cmath>
+#include <Rcpp.h>
+using namespace Rcpp;
 #include "checkconstraints.h"
 
 //1 = head, 2 = spouse, 3 = biological child,
@@ -7,11 +9,11 @@
 //10 = child-in-law, 11 = other relative,
 //12 = boarder, roommate or partner,
 //13 = other non-relative or foster child
-inline bool IsHead(double relate, double age) {
+inline bool IsHead(int relate, int age) {
     return (relate == HEAD && age >=16);
 }
 
-inline int GetHead(double *record, int hhsize) {
+inline int GetHead(int *record, int hhsize) {
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]==HEAD) {
             return i;
@@ -20,7 +22,7 @@ inline int GetHead(double *record, int hhsize) {
     return -1;
 }
 
-inline bool MoreThanOneHead(double *record, int hhsize) {
+inline bool MoreThanOneHead(int *record, int hhsize) {
     int nhead = 0;
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]==HEAD) {
@@ -30,7 +32,7 @@ inline bool MoreThanOneHead(double *record, int hhsize) {
     return (nhead >1);
 }
 
-inline int GetValidSpouse(double *record, int hhsize) {
+inline int GetValidSpouse(int *record, int hhsize) {
     int nspouse = 0;
     int spouse = -1;
     for (int i = 1; i <= hhsize; i++) {
@@ -45,13 +47,13 @@ inline int GetValidSpouse(double *record, int hhsize) {
     return spouse;
 }
 
-inline bool IsValidCouple(double *record, int hh_size, int spouse, int head) {
+inline bool IsValidCouple(int *record, int hh_size, int spouse, int head) {
     if (spouse ==0) { //bad spouse or too many spouses
         return false;
     } else { //valid spouse or no spouse
         if (spouse>0) {//the only spouse, so check sex, and age difference
             if (record[head] == record[spouse]) {return false;}
-            if (std::abs(record[hh_size + head] - record[hh_size + spouse]) > 49) {return false;}
+            if (std::abs((float)record[hh_size + head] - (float)record[hh_size + spouse]) > 49) {return false;}
         }
     }
     return true;
@@ -59,8 +61,8 @@ inline bool IsValidCouple(double *record, int hh_size, int spouse, int head) {
 
 //return -1 if no biological child
 //return the record index of the oldest child otherwise
-inline int GetOldestBiologicalChild(double *record, int hhsize) {
-    double age = -1;
+inline int GetOldestBiologicalChild(int *record, int hhsize) {
+    int age = -1;
     int child = -1;  //no childen
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]==BIOLOGICALCHILD) {
@@ -73,7 +75,7 @@ inline int GetOldestBiologicalChild(double *record, int hhsize) {
     return child;
 }
 
-inline bool IsValidBiologicalChild(double *record, int hh_size, int child, int head) {
+inline bool IsValidBiologicalChild(int *record, int hh_size, int child, int head) {
     if (child>0) {//get a child, check age difference
         if (record[hh_size + head] - record[hh_size + child] <7) {return false;}
     }
@@ -83,8 +85,8 @@ inline bool IsValidBiologicalChild(double *record, int hh_size, int child, int h
 
 //return -1 if no adopted child
 //return the record index of the oldest child otherwise
-inline int GetOldestAdoptedChild(double *record, int hhsize) {
-  double age = -1;
+inline int GetOldestAdoptedChild(int *record, int hhsize) {
+  int age = -1;
   int child = -1;  //no childen
   for (int i = 1; i <= hhsize; i++) {
     if (record[2*hhsize+i]==ADOPTEDCHILD) {
@@ -97,7 +99,7 @@ inline int GetOldestAdoptedChild(double *record, int hhsize) {
   return child;
 }
 
-inline bool IsValidAdoptedChild(double *record, int hh_size, int child, int head) {
+inline bool IsValidAdoptedChild(int *record, int hh_size, int child, int head) {
   if (child>0) {//get a child, check age difference
     if (record[hh_size + head] - record[hh_size + child] <11) {return false;}
   }
@@ -106,8 +108,8 @@ inline bool IsValidAdoptedChild(double *record, int hh_size, int child, int head
 
 //return -1 if no adopted child
 //return the record index of the oldest child otherwise
-inline int GetOldestStepChild(double *record, int hhsize) {
-  double age = -1;
+inline int GetOldestStepChild(int *record, int hhsize) {
+  int age = -1;
   int child = -1;  //no childen
   for (int i = 1; i <= hhsize; i++) {
     if (record[2*hhsize+i]==STEPCHILD) {
@@ -120,7 +122,7 @@ inline int GetOldestStepChild(double *record, int hhsize) {
   return child;
 }
 
-inline bool IsValidStepChild(double *record, int hh_size, int child, int head) {
+inline bool IsValidStepChild(int *record, int hh_size, int child, int head) {
   if (child>0) {//get a child, check age difference
     if (record[hh_size + head] - record[hh_size + child] <9) {return false;}
   }
@@ -130,8 +132,8 @@ inline bool IsValidStepChild(double *record, int hh_size, int child, int head) {
 
 //return -1 if no child
 //return the record index of the oldest child otherwise
-//inline int GetOldestChildInLaw(double *record, int hhsize) {
-//    double age = -1;
+//inline int GetOldestChildInLaw(int *record, int hhsize) {
+//    int age = -1;
 //    int child = -1;  //no childen
 //    for (int i = 1; i <= hhsize; i++) {
 //        if (record[2*hhsize+i]==CHILDINLAW) {
@@ -144,7 +146,7 @@ inline bool IsValidStepChild(double *record, int hh_size, int child, int head) {
 //    return child;
 //}
 
-//inline bool IsValidChildInLaw(double *record, int hh_size, int child, int head) {
+//inline bool IsValidChildInLaw(int *record, int hh_size, int child, int head) {
 //    if (child>0) {//get a child, check age difference
 //        if (record[hh_size + head] - record[hh_size + child] <10) {return false;}
 //    }
@@ -153,8 +155,8 @@ inline bool IsValidStepChild(double *record, int hh_size, int child, int head) {
 
 //return -1 if no parent
 //return the record index of the youngest parent otherwise
-inline int GetYoungestParent(double *record, int hhsize) {
-    double age = 1000;
+inline int GetYoungestParent(int *record, int hhsize) {
+    int age = 1000;
     int parent = -1;  //no childen
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]==PARENT) {
@@ -167,15 +169,15 @@ inline int GetYoungestParent(double *record, int hhsize) {
     return parent;
 }
 
-inline bool IsValidParent(double *record, int hh_size, int parent, int head) {
+inline bool IsValidParent(int *record, int hh_size, int parent, int head) {
     if (parent>0) {//get a child, check age difference
         if (record[hh_size + parent] -record[hh_size + head] < 4) {return false;}
     }
     return true;
 }
 
-inline int GetYoungestParentInLaw(double *record, int hhsize) {
-    double age = 1000;
+inline int GetYoungestParentInLaw(int *record, int hhsize) {
+    int age = 1000;
     int parent = -1;  //no childen
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]==PARENTINLAW) {
@@ -188,14 +190,14 @@ inline int GetYoungestParentInLaw(double *record, int hhsize) {
     return parent;
 }
 
-inline bool IsValidParentInLaw(double *record, int hh_size, int parent, int head) {
+inline bool IsValidParentInLaw(int *record, int hh_size, int parent, int head) {
     if (parent>0) {//get a child, check age difference
         if (record[hh_size + parent] -record[hh_size + head] <4) {return false;}
     }
     return true;
 }
 
-inline bool IsValidSibling(double *record, int hhsize, int head) {
+inline bool IsValidSibling(int *record, int hhsize, int head) {
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]== SIBLING) {
             if (std::abs(record[hhsize + i] - record[hhsize + head]) >37) {return false;}
@@ -204,10 +206,10 @@ inline bool IsValidSibling(double *record, int hhsize, int head) {
     return true;
 }
 
-inline bool IsValidGrandChild(double *record, int hhsize, int spouse, int head) {
+inline bool IsValidGrandChild(int *record, int hhsize, int spouse, int head) {
     for (int i = 1; i <= hhsize; i++) {
         if (record[2*hhsize+i]== GRANDCHILD) {
-            if (record[hhsize + head] < 33) {return false;} //too young to be grand parent for the HEAD
+            if (record[hhsize + head] < 31) {return false;} //too young to be grand parent for the HEAD
             if (spouse > 0) { //make sure the spouse(if any) is not too young
                 if (record[hhsize + spouse] < 17) {return false;}
             }
@@ -218,7 +220,7 @@ inline bool IsValidGrandChild(double *record, int hhsize, int spouse, int head) 
 }
 
 
-int isValid(double *datah, int hh_size) {
+int isValid(int *datah, int hh_size) {
 
     int head = GetHead(datah,hh_size);
     if (head <=0) {return 0;}
@@ -238,9 +240,6 @@ int isValid(double *datah, int hh_size) {
     int oldestStepChild = GetOldestStepChild(datah,hh_size);
     if (!IsValidStepChild(datah,hh_size,oldestStepChild,head)) {return 0;}
 
-    //int oldestChildInLaw = GetOldestChildInLaw(datah,hh_size);
-    //if (!IsValidChildInLaw(datah,hh_size,oldestChildInLaw,head)) {return 0;}
-
     int youngestParent = GetYoungestParent(datah,hh_size);
     if (!IsValidParent(datah,hh_size,youngestParent,head)) {return 0;}
 
@@ -255,10 +254,10 @@ int isValid(double *datah, int hh_size) {
 
 }
 
-int checkconstraints_imp(double *data, double *isPossible,int hh_size, int DIM, int nHouseholds) {
+int checkconstraints_imp(int *data, int *isPossible,int hh_size, int DIM, int nHouseholds) {
 
     int totalpossible = 0;
-    double *datah = new double[hh_size * 3 + 1];
+    int *datah = new int[hh_size * COL + 1];
     //column 3, 6, 7 = sex, age and relte
     int column[COL]; column[0] = 3; column[1] = 6; column[2] = 7;
 
@@ -269,38 +268,54 @@ int checkconstraints_imp(double *data, double *isPossible,int hh_size, int DIM, 
             }
         }
 		isPossible[m-1] = isValid(datah, hh_size);
-        totalpossible+= (int)isPossible[m-1];
+        totalpossible+= isPossible[m-1];
 	}
 
 	delete [] datah;
     return totalpossible;
 }
 
-int checkconstraints_imp_HHhead_at_group_level(double *data, double *isPossible,int hh_size, int DIM, int nHouseholds) {
-  int realsize = hh_size + 1;
-  int totalpossible = 0;
-  double *datah = new double[realsize * 3 + 1];
-  //column 2, 5, 6 = sex, age and relte //zero-based here
-  int column[COL]; column[0] = 0; column[1] = 3; column[2] = 4;
+// [[Rcpp::export]]
+IntegerVector checkSZ(IntegerMatrix Data_to_check, int h){
+  int n0 = Data_to_check.nrow();
+  int p = Data_to_check.ncol()/h;
 
-  for (int m = 1; m <= nHouseholds; m++){
-    //for each household member
-    for (int j = 1; j < realsize; j++) {
-      for (int k = 0; k < COL; k++) {
-        datah[k * realsize + j] = data[((j-1) * DIM + column[k]+2) * nHouseholds + (m-1)];
-        if (k+1 == COL) { //relate column
-          datah[k * realsize + j] = datah[k * realsize + j] + 1; //addjust by adding 1
-        }
-      }
+  IntegerVector Data_checked(n0);
+  int *datah = new int[h * COL + 1];
+  for (int i = 0; i < n0; i++) {
+    for(int j = 0; j < h; j++) { //0 sex, sex,sex,...age,age,age,...relte,relte,relate...
+      int base = p * j;
+      datah[j+1] = Data_to_check(i, base + GENDER);
+      datah[j+1 + h] = Data_to_check(i, base + AGE);
+      datah[j+1 + 2*h] = Data_to_check(i, base + RELATE);
     }
-    datah[realsize] = data[(column[0]+8) * nHouseholds + (m-1)];
-    datah[2 * realsize] = data[(column[1]+8) * nHouseholds + (m-1)];
-    datah[3 * realsize] = 1;
-
-    isPossible[m-1] = isValid(datah, realsize);
-    totalpossible+= (int)isPossible[m-1];
+    Data_checked[i] = isValid(datah,h);
   }
-
   delete [] datah;
-  return totalpossible;
+  return Data_checked;
+}
+
+//only return the index (one-based of the first valid data point)
+// [[Rcpp::export]]
+IntegerVector checkSZ2(IntegerMatrix Data_to_check, int h){
+  int n0 = Data_to_check.nrow();
+  int p = Data_to_check.ncol()/h;
+
+  IntegerVector First_Valid(1);
+  First_Valid[0] = 0;
+  int *datah = new int[h * COL + 1];
+  for (int i = 0; i < n0; i++) {
+    for(int j = 0; j < h; j++) { //0 sex, sex,sex,...age,age,age,...relte,relte,relate...
+      int base = p * j;
+      datah[j+1] = Data_to_check(i, base + GENDER);
+      datah[j+1 + h] = Data_to_check(i, base + AGE);
+      datah[j+1 + 2*h] = Data_to_check(i, base + RELATE);
+    }
+    if (isValid(datah,h)) {
+      First_Valid[0] = i+1;
+      break;
+    }
+  }
+  delete [] datah;
+  return First_Valid;
 }

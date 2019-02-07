@@ -7,18 +7,10 @@ Initialize the input data structure.
 Initialize the input data structure.
 }
 \usage{
-initData(household, individual_variable_index, household_variable_index)
+initData(md)
 }
 \arguments{
-  \item{household}{
-  A data matrix for the input household data.
-}
-  \item{individual_variable_index}{
-  Vector of column indexes for the individual-level variables.
-}
-  \item{household_variable_index}{
-  Vector of column indexes for the group-level variables.
-}
+  \item{md}{A list holds all the input data with optional missing data info.}
 }
 %\details{
 %Curently the variables and the level of each variable are harded coded. This needs to be changed later on once it is generalized.

@@ -7,7 +7,7 @@ Update individual level latent class  indexes.
 Update individual level latent class  indexes.
 }
 \usage{
-sampleM(phi, data, omega, G, serial)
+sampleM(phi, data, omega, G, serial,  Parallel)
 }
 \arguments{
   \item{phi}{
@@ -24,6 +24,9 @@ sampleM(phi, data, omega, G, serial)
 }
   \item{serial}{
   Vector containing the household index for each individual in the data.
+}
+\item{Parallel}{
+  Logical indicator for running the function in parallel mode.
 }
 }
 \details{

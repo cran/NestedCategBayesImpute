@@ -7,7 +7,7 @@ Checking a data matrix of households for the possible/impossible status under a 
 Checking a data matrix of households for the possible/impossible status under a predefined set of structural zeros.
 }
 \usage{
-checkconstraints_HHhead_at_group_level(data, neededpossiblehh, hh_size)
+checkconstraints_HHhead_at_group_level(data, neededpossiblehh, hh_size, parallel)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,9 @@ checkconstraints_HHhead_at_group_level(data, neededpossiblehh, hh_size)
   \item{hh_size }{
   The household size for the households in \verb{data}.
   }
+  \item{parallel}{
+  Logical indicator for running the function in parallel mode.
+}
 }
 \details{
 Given an input household data matrix, these functions will check the possible/impossible status of each household and also output the desired number of possible and impossible households separately. \verb{checkconstraints_HHhead_at_group_level} checks contraints when the household head is moved to the household level. For the list of structural zeros currently included, see the documentation for \verb{checkconstraints}.

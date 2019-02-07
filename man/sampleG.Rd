@@ -7,7 +7,7 @@ Update household (group) level latent class indexes.
 Update household (group) level latent class indexes.
 }
 \usage{
-sampleG(phi, data, omega, pi, ni, HHdata, lambda)
+sampleG(phi, data, omega, pi, ni, HHdata, lambda, Parallel)
 }
 \arguments{
   \item{phi}{
@@ -30,6 +30,9 @@ sampleG(phi, data, omega, pi, ni, HHdata, lambda)
 }
   \item{lambda}{
   A list of matrices of the group-level probabilities for each group-level variable by the group-level latent classes. Each matrix in the list is for each group-level variable.
+}
+\item{Parallel}{
+  Logical indicator for running the function in parallel mode.
 }
 }
 \details{

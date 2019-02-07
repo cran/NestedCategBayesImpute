@@ -7,8 +7,8 @@ Generate the desired number of impossible households required to observe a given
 Given model parameters, generate the desired number of impossible households required to observe a given number of possible households. Also generate synthetic (and valid) data of the same size as the observed data when required.
 }
 \usage{
-GetImpossibleHouseholds(d, n_star_h, lambda, omega, phi, pi, howmany, n, synindex,
-                        HHhead_at_group_level)
+GetImpossibleHouseholds(d, n_star_h, lambda, omega, phi, pi, blocksize, n, synindex,
+                        HHhead_at_group_level,Parallel)
 }
 \arguments{
   \item{d}{
@@ -25,7 +25,7 @@ GetImpossibleHouseholds(d, n_star_h, lambda, omega, phi, pi, howmany, n, syninde
 }
   \item{pi}{Latent class probabilities for the group-level latent classes.
 }
-  \item{howmany}{
+  \item{blocksize}{
   Number of households to be generated at a time; batch sampling is used to improve computing speed.
 }
   \item{n}{
@@ -35,6 +35,9 @@ GetImpossibleHouseholds(d, n_star_h, lambda, omega, phi, pi, howmany, n, syninde
 }
   \item{HHhead_at_group_level}{
   Logical indicator for data structure with respect to the household head. Set to TRUE if the household head has been moved to the household level and FALSE otherwise.
+}
+\item{Parallel}{
+  Logical indicator for running the function in parallel mode.
 }
 }
 

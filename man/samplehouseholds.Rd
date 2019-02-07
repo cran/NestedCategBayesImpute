@@ -7,7 +7,8 @@ Rcpp implementation for sampling household data without constraints.
 Rcpp implementation for sampling household data without constraints.
 }
 \usage{
-samplehouseholds(phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize)
+samplehouseholds(phi, omega, pi, d, lambda, currrentbatch, nHouseholds, householdsize,
+      HeadAtGroupLevel, Parallel)
 }
 \arguments{
   \item{phi}{Matrix of posterior samples for the individual-level probabilities for each individual-level variable by each pair of group-level and individual-level latent classes.}
@@ -23,6 +24,12 @@ samplehouseholds(phi, omega, pi, d, lambda, currrentbatch, nHouseholds, househol
 }
   \item{householdsize}{
   The size of the households to be generated.
+}
+\item{HeadAtGroupLevel}{
+  Logical indicator for running the model that codes household head at the group level.
+}
+\item{Parallel}{
+  Logical indicator for running the function in parallel mode.
 }
 }
 \details{

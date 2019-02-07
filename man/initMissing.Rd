@@ -7,13 +7,10 @@ Initilize the misising data structure from input data
 Initilize the misising data structure from input data
 }
 \usage{
-initMissing(household, individual_variable_index, household_variable_index,
-            miss_batch, struc_zero_variables)
+initMissing(data,struc_zero_variables,miss_batch)
 }
 \arguments{
-  \item{household}{A data matrix for the input household data.}
-   \item{individual_variable_index}{Vector of column indexes for the individual-level variables.}
-  \item{household_variable_index}{Vector of column indexes for the group-level variables.}
-  \item{miss_batch}{initial number of batches to sample for each household with missing data.}
+  \item{data}{A list that holds all input data info.}
   \item{struc_zero_variables}{column indexes for the variables that define structural zeros like age and relate (including those for the household head).}
+  \item{miss_batch}{initial number of batches to sample for each household with missing data.}
 }
